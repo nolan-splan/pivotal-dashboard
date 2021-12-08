@@ -4,9 +4,11 @@ export function fetchMe() {
   performRequest("https://www.pivotaltracker.com/services/v5/me", options)
 }
 
-export function fetchMyPeople() {
+export function fetchMyPeople(callback) {
   var options = { method: 'GET', headers: headers }
   performRequest("https://www.pivotaltracker.com/services/v5/my/people?project_id=866453", options)
+    .then(res => res.json())
+    .then(json => callback(json))
 }
 
 export function fetchMyNotifications() {
@@ -26,9 +28,16 @@ export function fetchProject(projectId, callback) {
     .then(json => callback(json))
 }
 
-export async function fetchIterations(projectId, callback) {
+export function fetchIterations(projectId, callback) {
   var options = { method: 'GET', headers: headers }
   performRequest(`https://www.pivotaltracker.com/services/v5/projects/${projectId}/iterations?scope=done&offset=-4&limit=4`, options)
+    .then(res => res.json())
+    .then(json => callback(json))
+}
+
+export function fetchProjectMemberships(projectId, callback) {
+  var options = { method: 'GET', headers: headers }
+  performRequest(`https://www.pivotaltracker.com/services/v5/projects/${projectId}/memberships`, options)
     .then(res => res.json())
     .then(json => callback(json))
 }
