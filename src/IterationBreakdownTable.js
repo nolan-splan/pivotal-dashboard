@@ -11,10 +11,10 @@ export default function IterationBreakdownTable(props) {
       <TableHead>
         <TableRow>
           <TableCell>Name</TableCell>
-          <TableCell align="right">Total Stories</TableCell>
           <TableCell align="right">Features</TableCell>
           <TableCell align="right">Bugs</TableCell>
           <TableCell align="right">Chores</TableCell>
+          <TableCell align="right">Total Stories</TableCell>
           <TableCell align="right">Completed Points</TableCell>
           <TableCell align="right">Percent of Total</TableCell>
         </TableRow>
@@ -28,17 +28,26 @@ export default function IterationBreakdownTable(props) {
           let bugCount = storiesForUser.filter(story => story.story_type === "bug").length
           let choreCount = storiesForUser.filter(story => story.story_type === "chore").length
           return (
-            <TableRow key={userId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableRow key={userId}>
               <TableCell component="th" scope="row">{person.name}</TableCell>
-              <TableCell align="right">{storiesForUser.length}</TableCell>
               <TableCell align="right">{featureCount}</TableCell>
               <TableCell align="right">{bugCount}</TableCell>
               <TableCell align="right">{choreCount}</TableCell>
+              <TableCell align="right">{storiesForUser.length}</TableCell>
               <TableCell align="right">{totalPointsForUser}</TableCell>
               <TableCell align="right">{Math.floor((totalPointsForUser / totalIterationPoints) * 100)}%</TableCell>
             </TableRow>
           )
         })}
+        <TableRow style={{ borderTop: "1.5px solid white" }}>
+          <TableCell><b>Total:</b></TableCell>
+          <TableCell align="right"><b>{iteration.stories.filter(story => story.story_type === "feature").length}</b></TableCell>
+          <TableCell align="right"><b>{iteration.stories.filter(story => story.story_type === "bug").length}</b></TableCell>
+          <TableCell align="right"><b>{iteration.stories.filter(story => story.story_type === "chore").length}</b></TableCell>
+          <TableCell align="right"><b>{iteration.stories.length}</b></TableCell>
+          <TableCell align="right"><b>{iteration.stories.filter(story => !["bug", "chore"].includes(story.story_type)).map(story => story.estimate).reduce(reducer)}</b></TableCell>
+          <TableCell />
+        </TableRow>
       </TableBody>
     </Table>
   )

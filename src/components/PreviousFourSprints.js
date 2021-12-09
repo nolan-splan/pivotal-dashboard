@@ -41,23 +41,7 @@ export default function PreviousFourSprints(props) {
             <Grid container>
               <Grid item xs={6}>
                 <Paper key={iteration.number} style={{ padding: '1rem', marginLeft: '1rem' }}>
-                  <Stack direction="row" justifyContent="space-between" style={{ marginBottom: '1rem' }}>
-                    <Typography variant="h5">Sprint #{iteration.number} - {totalIterationPoints} Points</Typography>
-                    <Stack direction="row" spacing={2} justifyContent="flex-end">
-                      <Badge badgeContent={iteration.stories.length} color="primary">
-                        <FontAwesomeIcon icon={faBook} size="2x" color="#663e2e" />
-                      </Badge>
-                      <Badge badgeContent={iteration.stories.filter(story => story.story_type === "feature").length} color="primary">
-                        <FontAwesomeIcon icon={faStar} size="2x" color="#e3c240" />
-                      </Badge>
-                      <Badge badgeContent={iteration.stories.filter(story => story.story_type === "bug").length} color="primary">
-                        <FontAwesomeIcon icon={faBug} size="2x" color="red" />
-                      </Badge>
-                      <Badge badgeContent={iteration.stories.filter(story => story.story_type === "chore").length} color="primary">
-                        <FontAwesomeIcon icon={faCog} size="2x" color="gray" />
-                      </Badge>
-                    </Stack>
-                  </Stack>
+                  <Typography variant="h5" style={{ marginBottom: '1rem' }}>Sprint #{iteration.number} - {totalIterationPoints} Points</Typography>
                   <Divider />
                   <IterationBreakdownTable iteration={iteration} people={people} totalIterationPoints={totalIterationPoints} />
                 </Paper>
