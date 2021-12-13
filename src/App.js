@@ -5,6 +5,7 @@ import React from 'react'
 import Navbar from './components/Navbar';
 import PreviousFourSprints from './components/PreviousFourSprints';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import CurrentSprint from './components/CurrentSprint';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
       <BrowserRouter>
         <Navbar theme={theme} />
         <Routes>
-          <Route path="/" element={<h1>Current sprint</h1>} />
+          <Route path="/" element={<CurrentSprint />} />
           <Route path="previous_four_sprints" element={<PreviousFourSprints />} />
         </Routes>
       </BrowserRouter>

@@ -35,6 +35,13 @@ export function fetchIterations(projectId, callback) {
     .then(json => callback(json))
 }
 
+export function fetchCurrentIteration(projectId, callback) {
+  var options = { method: 'GET', headers: headers }
+  performRequest(`https://www.pivotaltracker.com/services/v5/projects/${projectId}/iterations?scope=current&limit=1`, options)
+    .then(res => res.json())
+    .then(json => callback(json[0]))
+}
+
 export function fetchProjectMemberships(projectId, callback) {
   var options = { method: 'GET', headers: headers }
   performRequest(`https://www.pivotaltracker.com/services/v5/projects/${projectId}/memberships`, options)
