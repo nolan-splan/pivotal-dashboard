@@ -21,7 +21,7 @@ export default function Example(props) {
 	const endDate = moment(sprint.finish)
 
 	const sprintDates = []
-	for(var i = 0; i < currentDate.diff(startDate, 'days'); i++) {
+	for(var i = 0; i <= endDate.diff(startDate, 'days'); i++) {
 		var fakeDate = moment(sprint.start)
 		var d = fakeDate.add(i, 'days')
 		sprintDates.push(d)
@@ -32,7 +32,7 @@ export default function Example(props) {
 		features: acceptedFeatures.filter(story => moment(story.accepted_at).format('MM/D') === date.format('MM/D')).length,
 		bugs: acceptedBugs.filter(story => moment(story.accepted_at).format('MM/D') === date.format('MM/D')).length,
 		chores: acceptedChores.filter(story => moment(story.accepted_at).format('MM/D') === date.format('MM/D')).length,
-		points: acceptedFeatures.filter(story => moment(story.accepted_at) <= date).map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+		points: acceptedFeatures.filter(story => moment(story.accepted_at).endOf('day') <= date.endOf('day')).map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0) // Just make that a >= to make itt a burndown instead of burn up???????????????????
 		// points: acceptedFeatures.filter(story => moment(story.accepted_at).format('MM/D') === date.format('MM/D')).map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
 	}))
 
@@ -54,7 +54,7 @@ export default function Example(props) {
 				<ul className="list">
 					{payload.map((entry, index) => (
 						<li key={`item-${index}`} style={{ color: entry.color }}>
-							{`accepted ${entry.name}: ${entry.value} (${getPercent(entry.value, total)})`}
+							{`Total Accepted ${entry.name}: ${entry.value} (${getPercent(entry.value, total)})`}
 						</li>
 					))}
 				</ul>
