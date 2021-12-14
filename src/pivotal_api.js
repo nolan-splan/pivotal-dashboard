@@ -49,6 +49,31 @@ export function fetchProjectMemberships(projectId, callback) {
     .then(json => callback(json))
 }
 
+export async function fetchStoryTransitions(projectId, storyIds, callback) {
+  try {
+    var options = { method: 'GET', headers: headers }
+    const urls = storyIds.map(id => `https://www.pivotaltracker.com/services/v5/projects/${projectId}/stories/${id}/transitions`)
+
+    const requests = urls.map((url) => fetch(url, options))
+    const responses = await Promise.all(requests)
+
+    const errors = responses.filter((response) => !response.ok)
+
+    if (errors.length > 0) {
+      throw errors.map((response) => Error(response.statusText))
+    }
+
+    const json = responses.map((response) => response.json())
+    const data = await Promise.all(json)
+
+    callback(data.flat())
+  }
+  catch (errors) {
+    errors.forEach((error) => console.error("Error: ", error))
+  }
+
+}
+
 function performRequest(url, options) {
   return fetch(url, options)
 }

@@ -10,19 +10,42 @@ import StoriesBreakdown from './StoriesBreakdown'
 import PointsBreakdownPieChart from './PointsBreakdownPieChart'
 import AcceptedPointsAreaChart from './AcceptedPointsAreaChart'
 import SprintPercentComplete from './charts/pie/SprintPercentComplete'
-import PointsPerDeveloper from './charts/radar/PointsPerDeveloper'
+import PointOwnership from './charts/radar/PointOwnership'
+import { fetchProjectMemberships, fetchStoryTransitions } from '../pivotal_api'
+
+import StoryCompletionTime from './charts/scatter/StoryCompletionTime'
 window.moment = moment
 
 export default function CurrentSprint(props) {
 	const [currentSprint, setCurrentSprint] = React.useState({})
+	const [people, setPeople] = React.useState([])
+	const [transitions, setTransitions] = React.useState([])
+
+
 	const projectId = 866453
+
+  const getPeopleFromMemberships = (memberships) => {
+    const peeps = memberships.map(membership => membership.person)
+    setPeople(peeps)
+  }
+
+  React.useEffect(() => {
+    fetchProjectMemberships(projectId, getPeopleFromMemberships)
+  }, [])
+
 	React.useEffect(() => {
 		fetchCurrentIteration(projectId, setCurrentSprint)
 	}, [])
 
+	// fix this1
+	React.useEffect(() => {
+		if (currentSprint.stories) {
+			fetchStoryTransitions(projectId, currentSprint.stories.filter(story => story.story_type === "feature").map(story => story.id), setTransitions)
+		}
+	}, [currentSprint.stories])
+
 	const { start, finish, number } = currentSprint
 
-	window.sprint = currentSprint
 	const renderLoadingSpinner = () => (
 		<Paper style={{ textAlign: 'center', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto', marginTop: '1rem' }}>
 			<Box style={{ padding: '1rem' }}>
@@ -57,7 +80,7 @@ export default function CurrentSprint(props) {
 
 	return(
 		<Container maxWidth="lg">
-			{ Object.keys(currentSprint).length > 0 ? (
+			{ Object.keys(currentSprint).length > 0 && people.length > 0 && transitions.length > 0 ? (
 				<React.Fragment>
 					<Stack direction="row" spacing={3}>
 						<Typography variant="h1">Sprint #{number}</Typography>
@@ -122,9 +145,12 @@ export default function CurrentSprint(props) {
 					</Grid>
 					<Divider style={{ marginTop: '1rem' }} />
 					<Grid container alignItems="center" spacing={3}>
-						<Grid item xs={3}>
-							<PointsPerDeveloper stories={currentSprint.stories} />
+						<Grid item xs={6}>
+							<PointOwnership stories={currentSprint.stories} people={people} />
 						</Grid>
+						{/* <Grid item xs={6}>
+							<StoryCompletionTime startDate={start} endDate={finish} stories={currentSprint.stories} transitions={transitions} />
+						</Grid> */}
 					</Grid>
 					{/** completion time vs story estimate graph? scatter plot */}
 					{/** point distribution by user? radar chart */}

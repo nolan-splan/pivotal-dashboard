@@ -24,7 +24,7 @@ export default function Example(props) {
 	const endDate = moment(sprint.finish)
 
 	const sprintDates = []
-	for(var i = 0; i <= endDate.diff(startDate, 'days'); i++) {
+	for(var i = 0; i < endDate.diff(startDate, 'days'); i++) {
 		var fakeDate = moment(sprint.start)
 		var d = fakeDate.add(i, 'days')
 		sprintDates.push(d)
