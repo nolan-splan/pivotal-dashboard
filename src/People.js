@@ -6,7 +6,6 @@ const whitelist = ['Nolan Splan', 'Dominic Diehn', 'Richy Carpenter', 'Jason Pol
 export default function People(props) {
   const { people } = props
   const filteredPeople = people.filter(person => whitelist.includes(person.name))
-  console.log('people', filteredPeople)
   return (
     <Typography variant="h3">People</Typography>
   )

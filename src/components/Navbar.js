@@ -1,4 +1,6 @@
 import { NavLink } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCompass } from '@fortawesome/free-regular-svg-icons'
 import {
   AppBar,
   Button,
@@ -12,6 +14,7 @@ export default function Navbar(props) {
     <AppBar position="static" color="default">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          <FontAwesomeIcon size="2x" color="#90ee90" icon={faCompass} style={{ marginRight: '.5rem' }} />
           <Typography
             variant="h6"
             noWrap

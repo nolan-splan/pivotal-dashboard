@@ -1,5 +1,5 @@
 import React from 'react'
-import { faCheck, faTimes, faStar, faCog, faBug } from '@fortawesome/free-solid-svg-icons'
+import { faStar, faCog, faBug } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Divider, Paper, Typography, Stack } from '@mui/material'
 
@@ -11,25 +11,24 @@ export default function StoriesBreakdown(props) {
 	const chores = stories.filter(story => story.story_type === "chore")
 	const features = stories.filter(story => story.story_type === "feature")
 
-	const startedFeatures = features.filter(story => story.current_state === "started")
-	const finishedFeatures = features.filter(story => story.current_state === "finished")
-	const deliveredFeatures = features.filter(story => story.current_state === "delivered")
-	const acceptedFeatures = features.filter(story => story.current_state === "accepted")
-	const rejectedFeatures = features.filter(story => story.current_state === "rejected")
-	console.log('features: ', features)
+	// const startedFeatures = features.filter(story => story.current_state === "started")
+	// const finishedFeatures = features.filter(story => story.current_state === "finished")
+	// const deliveredFeatures = features.filter(story => story.current_state === "delivered")
+	// const acceptedFeatures = features.filter(story => story.current_state === "accepted")
+	// const rejectedFeatures = features.filter(story => story.current_state === "rejected")
 
-	const startedPoints = startedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
-	const finishedPoints = finishedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
-	const deliveredPoints = deliveredFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
-	const acceptedPoints = acceptedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
-	const rejectedPoints = rejectedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
-	const totalPoints = features.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+	// const startedPoints = startedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+	// const finishedPoints = finishedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+	// const deliveredPoints = deliveredFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+	// const acceptedPoints = acceptedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+	// const rejectedPoints = rejectedFeatures.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
+	// const totalPoints = features.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
 
-	const storyIsStarted = story => startedFeatures.includes(story)
-	const storyIsFinished = story => finishedFeatures.includes(story)
-	const storyIsDelivered = story => deliveredFeatures.includes(story)
-	const storyIsAccepted = story => acceptedFeatures.includes(story)
-	const storyIsRejected = story => rejectedFeatures.includes(story)
+	// const storyIsStarted = story => startedFeatures.includes(story)
+	// const storyIsFinished = story => finishedFeatures.includes(story)
+	// const storyIsDelivered = story => deliveredFeatures.includes(story)
+	// const storyIsAccepted = story => acceptedFeatures.includes(story)
+	// const storyIsRejected = story => rejectedFeatures.includes(story)
 
 	const getIconForStoryType = (story) => {
 		switch(story.story_type) {
@@ -52,7 +51,7 @@ export default function StoriesBreakdown(props) {
 				<Typography variant="h3">Features</Typography>
 				<Divider variant="middle" />
 				{ features.map(story => (
-					<Paper sx={{ padding: '1rem', width: '100%' }}>
+					<Paper key={story.id} sx={{ padding: '1rem', width: '100%' }}>
 						<Stack direction="row" spacing={1}>
 							<FontAwesomeIcon icon={getIconForStoryType(story)} color="#e0c85e" size="lg" />
 							<Divider variant="middle" orientation="vertical" flexItem />
@@ -72,7 +71,7 @@ export default function StoriesBreakdown(props) {
 				<Typography variant="h3">Bugs</Typography>
 				<Divider variant="middle" />
 				{ bugs.map(story => (
-					<Paper sx={{ padding: '1rem', width: '100%' }}>
+					<Paper key={story.id} sx={{ padding: '1rem', width: '100%' }}>
 						<Stack direction="row" spacing={1}>
 							<FontAwesomeIcon icon={getIconForStoryType(story)} size="lg" color="#ff7376" />
 							<Divider variant="middle" orientation="vertical" flexItem />
@@ -86,7 +85,7 @@ export default function StoriesBreakdown(props) {
 				<Typography variant="h3">Chores</Typography>
 				<Divider variant="middle" />
 				{ chores.map(story => (
-					<Paper sx={{ padding: '1rem', width: '100%' }}>
+					<Paper key={story.id} sx={{ padding: '1rem', width: '100%' }}>
 						<Stack direction="row" spacing={1}>
 							<FontAwesomeIcon icon={getIconForStoryType(story)} size="lg" color="#939592" />
 							<Divider variant="middle" orientation="vertical" flexItem />

@@ -1,27 +1,19 @@
-import React from 'react';
+import React from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Label } from 'recharts';
 import { Divider, Stack, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare } from '@fortawesome/free-solid-svg-icons';
 
-export default function Chart(props){
-	const { stories } = props
-	const features = stories.filter(story => story.story_type === "feature")
-	const bugs = stories.filter(story => story.story_type === "bug")
-	const chores = stories.filter(story => story.story_type === "chore")
-
+export default function SprintPercentComplete(props) {
+	const { acceptedPoints, totalPoints } = props
 	const data = [
 		{
-			name: 'Features',
-			value: features.length
+			name: 'Accepted',
+			value: acceptedPoints
 		},
 		{
-			name: 'Bugs',
-			value: bugs.length
-		},
-		{
-			name: 'Chores',
-			value: chores.length
+			name: 'Unaccepted',
+			value: totalPoints - acceptedPoints
 		},
 	]
 
@@ -29,20 +21,20 @@ export default function Chart(props){
 
 	const RADIAN = Math.PI / 180;
 	const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-		const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-		const x = cx + (radius + 20) * Math.cos(-midAngle * RADIAN);
-		const y = cy + (radius + 20) * Math.sin(-midAngle * RADIAN);
+		const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+		const x = cx + (radius + 20) * Math.cos(-midAngle * RADIAN)
+		const y = cy + (radius + 20) * Math.sin(-midAngle * RADIAN)
 
 		return (
 			<text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-				{`${Math.floor(stories.length * percent)} (${(percent * 100).toFixed(0)}%)`}
+				{`${totalPoints * percent} (${(percent * 100).toFixed(0)}%)`}
 			</text>
-		);
-	};
+		)
+	}
 
 	return (
 		<Stack spacing={2} style={{ textAlign: 'center', marginTop: '1rem' }}>
-			<Typography variant="h5">Sprint Composition</Typography>
+			<Typography variant="h5">Sprint Completion</Typography>
 			<ResponsiveContainer width="100%" height={250}>
 				<PieChart width={400} height={500}>
 					<Pie
@@ -59,24 +51,19 @@ export default function Chart(props){
 						{data.map((entry, index) => (
 							<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
 						))}
-						<Label stroke="white" value={`${stories.length} Total Stories`} position="center" />
+						<Label stroke="white" value={`${((acceptedPoints / totalPoints) * 100).toFixed(2)}%`} position="center" />
 					</Pie>
 				</PieChart>
 			</ResponsiveContainer>
 			<Stack direction="row" spacing={3} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
 				<Typography variant="body1">
 					<FontAwesomeIcon icon={faSquare} color="#90ee90" style={{ marginRight: '.5rem' }} />
-					Features
+					Accepted Points
 				</Typography>
 				<Divider orientation="vertical" variant="middle" flexItem />
 				<Typography variant="body1">
 					<FontAwesomeIcon icon={faSquare} color="#ff7376" style={{ marginRight: '.5rem' }} />
-					Bugs
-				</Typography>
-				<Divider orientation="vertical" variant="middle" flexItem />
-				<Typography variant="body1">
-					<FontAwesomeIcon icon={faSquare} color="#939592" style={{ marginRight: '.5rem' }} />
-					Chores
+					Unaccepted Points
 				</Typography>
 			</Stack>
 		</Stack>

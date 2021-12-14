@@ -1,4 +1,4 @@
-import { faCircle, faDotCircle, faFlagCheckered, faArrowDown, faRocket, faFire, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCircle, faDotCircle, faFlagCheckered, faArrowDown, faRocket, faFire } from '@fortawesome/free-solid-svg-icons'
 import { faCircle as faCircleEmpty } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CircularProgress, Container, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
@@ -9,6 +9,8 @@ import moment from 'moment'
 import StoriesBreakdown from './StoriesBreakdown'
 import PointsBreakdownPieChart from './PointsBreakdownPieChart'
 import AcceptedPointsAreaChart from './AcceptedPointsAreaChart'
+import SprintPercentComplete from './charts/pie/SprintPercentComplete'
+import PointsPerDeveloper from './charts/radar/PointsPerDeveloper'
 window.moment = moment
 
 export default function CurrentSprint(props) {
@@ -18,7 +20,7 @@ export default function CurrentSprint(props) {
 		fetchCurrentIteration(projectId, setCurrentSprint)
 	}, [])
 
-	const { start, finish, stories, teamStrength: team_strength, number } = currentSprint
+	const { start, finish, number } = currentSprint
 
 	window.sprint = currentSprint
 	const renderLoadingSpinner = () => (
@@ -41,15 +43,15 @@ export default function CurrentSprint(props) {
 	// put dates between start and current in one array, and dates between current and finish in another
 	const previousDates = []
 	const futureDates = []
-	for(var i = 0; i < currentDate.diff(startDate, 'days'); i++) {
-		var fakeDate = moment(start)
-		var d = fakeDate.add(i, 'days')
+	for(let i = 0; i < currentDate.diff(startDate, 'days'); i++) {
+		let fakeDate = moment(start)
+		let d = fakeDate.add(i, 'days')
 		previousDates.push(d)
 	}
 
-	for(var i = 0; i < endDate.diff(currentDate, 'days') + 1; i++) {
-		var fakeDate = moment()
-		var d = fakeDate.add(i, 'days')
+	for(let i = 0; i < endDate.diff(currentDate, 'days') + 1; i++) {
+		let fakeDate = moment()
+		let d = fakeDate.add(i, 'days')
 		futureDates.push(d)
 	}
 
@@ -66,7 +68,7 @@ export default function CurrentSprint(props) {
 						<Divider orientation="vertical" variant="middle" flexItem />
 						<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} style={{ flex: 1 }}>
 							{ previousDates.map((date, index) => (
-								<Stack spacing={1}>
+								<Stack key={index} spacing={1}>
 									{ index === 0 && (
 										<FontAwesomeIcon icon={faRocket} color="lightblue" size="lg" style={{ marginLeft: '.5rem' }} />
 									)}
@@ -75,7 +77,7 @@ export default function CurrentSprint(props) {
 								</Stack>
 							))}
 							{ futureDates.map((date, index) => (
-								<Stack spacing={1}>
+								<Stack key={index} spacing={1}>
 									{ index === 0 && (
 										<FontAwesomeIcon icon={faArrowDown} size="lg" color="red" style={{ marginLeft: '.5rem' }} />
 									)}
@@ -98,24 +100,35 @@ export default function CurrentSprint(props) {
 						<Grid item xs={3}>
 							<PointsBreakdownPieChart stories={currentSprint.stories} />
 						</Grid>
-						{/* <Grid item xs={4}>
-							<PointsBreakdownPieChart stories={currentSprint.stories} />
-						</Grid>
-						<Grid item xs={4}>
-							<PointsBreakdownPieChart stories={currentSprint.stories} />
-						</Grid> */}
 						<Grid item xs={6}>
 							<AcceptedPointsAreaChart sprint={currentSprint} />
 						</Grid>
 						<Grid item xs={3}>
-							<Box sx={{ textAlign: 'center' }}>
-								<Typography variant="h5">Sprint Completion</Typography>
-								<Typography variant="subtitle1">(By Accepted Points)</Typography>
-								<Typography variant="h1">{Math.floor((currentSprint.stories.filter(story => story.story_type === "feature").filter(story => story.current_state === "accepted").map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0) / currentSprint.stories.filter(story => story.story_type === "feature").map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)) * 100)}%</Typography>
-							</Box>
+							<SprintPercentComplete
+								acceptedPoints={
+									currentSprint.stories
+										.filter(story => story.story_type === "feature" && story.current_state === "accepted")
+										.map(story => story.estimate)
+										.reduce((partial_sum, a) => partial_sum + a, 0)
+								}
+								totalPoints={
+									currentSprint.stories
+										.filter(story => story.story_type === "feature")
+										.map(story => story.estimate)
+										.reduce((partial_sum, a) => partial_sum + a, 0)
+								}
+							/>
 						</Grid>
 					</Grid>
 					<Divider style={{ marginTop: '1rem' }} />
+					<Grid container alignItems="center" spacing={3}>
+						<Grid item xs={3}>
+							<PointsPerDeveloper stories={currentSprint.stories} />
+						</Grid>
+					</Grid>
+					{/** completion time vs story estimate graph? scatter plot */}
+					{/** point distribution by user? radar chart */}
+					{/** story time spent tree map (longer stories take up more space) simple tree map*/}
 					<StoriesBreakdown currentSprint={currentSprint} />
 				</React.Fragment>
 			) : (

@@ -1,6 +1,6 @@
-import { Divider, Grid, Paper, Stack, Typography, Badge } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faBug, faStar, faCog } from '@fortawesome/free-solid-svg-icons'
+import { Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faBook, faBug, faStar, faCog } from '@fortawesome/free-solid-svg-icons'
 import React from 'react'
 import IterationBreakdownTable from '../IterationBreakdownTable';
 import { fetchIterations, fetchProjectMemberships } from '../pivotal_api';
