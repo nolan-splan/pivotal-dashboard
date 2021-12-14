@@ -1,6 +1,8 @@
 import React from 'react'
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip } from 'recharts';
-import { Stack, Typography, Paper, CircularProgress } from '@mui/material'
+import { Stack, Typography, Paper, Divider } from '@mui/material'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquare } from '@fortawesome/free-solid-svg-icons';
 
 export default function PointOwnership(props) {
 	const uniq = (val, index, self) => self.indexOf(val) === index
@@ -59,6 +61,12 @@ export default function PointOwnership(props) {
 						<Tooltip content={renderTooltipContent}/>
 					</RadarChart>
 				</ResponsiveContainer>
+        <Stack direction="row" spacing={3} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+          <Typography variant="body1">
+            <FontAwesomeIcon icon={faSquare} color="#90ee90" style={{ marginRight: '.5rem' }} />
+            Points Owned
+          </Typography>
+        </Stack>
 			</React.Fragment>
 		</Stack>
 	)

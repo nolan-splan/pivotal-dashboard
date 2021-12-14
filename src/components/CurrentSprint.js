@@ -11,16 +11,12 @@ import PointsBreakdownPieChart from './PointsBreakdownPieChart'
 import AcceptedPointsAreaChart from './AcceptedPointsAreaChart'
 import SprintPercentComplete from './charts/pie/SprintPercentComplete'
 import PointOwnership from './charts/radar/PointOwnership'
-import { fetchProjectMemberships, fetchStoryTransitions } from '../pivotal_api'
-
-import StoryCompletionTime from './charts/scatter/StoryCompletionTime'
-window.moment = moment
+import { fetchProjectMemberships } from '../pivotal_api'
+import SprintBurndownChart from './charts/line/SprintBurndownChart'
 
 export default function CurrentSprint(props) {
 	const [currentSprint, setCurrentSprint] = React.useState({})
 	const [people, setPeople] = React.useState([])
-	const [transitions, setTransitions] = React.useState([])
-
 
 	const projectId = 866453
 
@@ -36,13 +32,6 @@ export default function CurrentSprint(props) {
 	React.useEffect(() => {
 		fetchCurrentIteration(projectId, setCurrentSprint)
 	}, [])
-
-	// fix this1
-	React.useEffect(() => {
-		if (currentSprint.stories) {
-			fetchStoryTransitions(projectId, currentSprint.stories.filter(story => story.story_type === "feature").map(story => story.id), setTransitions)
-		}
-	}, [currentSprint.stories])
 
 	const { start, finish, number } = currentSprint
 
@@ -80,7 +69,7 @@ export default function CurrentSprint(props) {
 
 	return(
 		<Container maxWidth="lg">
-			{ Object.keys(currentSprint).length > 0 && people.length > 0 && transitions.length > 0 ? (
+			{ Object.keys(currentSprint).length > 0 && people.length > 0 ? (
 				<React.Fragment>
 					<Stack direction="row" spacing={3}>
 						<Typography variant="h1">Sprint #{number}</Typography>
@@ -145,17 +134,23 @@ export default function CurrentSprint(props) {
 					</Grid>
 					<Divider style={{ marginTop: '1rem' }} />
 					<Grid container alignItems="center" spacing={3}>
-						<Grid item xs={6}>
+						<Grid item xs={3}>
 							<PointOwnership stories={currentSprint.stories} people={people} />
 						</Grid>
-						{/* <Grid item xs={6}>
-							<StoryCompletionTime startDate={start} endDate={finish} stories={currentSprint.stories} transitions={transitions} />
-						</Grid> */}
+            <Grid item xs={6}>
+              <SprintBurndownChart sprint={currentSprint} />
+            </Grid>
+            <Grid item xs={3}>
+              <Stack spacing={2} alignItems="center" justifyContent="space-around">
+                <Typography variant="h4">Team Strength</Typography>
+                <Typography variant="h1">{currentSprint.team_strength * 100}%</Typography>
+              </Stack>
+            </Grid>
 					</Grid>
 					{/** completion time vs story estimate graph? scatter plot */}
 					{/** point distribution by user? radar chart */}
 					{/** story time spent tree map (longer stories take up more space) simple tree map*/}
-					<StoriesBreakdown currentSprint={currentSprint} />
+					{/* <StoriesBreakdown currentSprint={currentSprint} /> */}
 				</React.Fragment>
 			) : (
 				renderLoadingSpinner()
