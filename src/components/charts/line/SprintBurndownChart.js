@@ -24,7 +24,6 @@ export default function SprintBurndownChart(props) {
 		sprintDates.push(d)
 	}
 
-  console.log('dates length', sprintDates.length)
 	const data = sprintDates.map((date, index) => ({
 		date: date.format('MM/D'),
 		remaining_points: totalPoints - acceptedFeatures.filter(story => moment(story.accepted_at).endOf('day') <= date.endOf('day')).map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0), // Just make that a >= to make itt a burndown instead of burn up???????????????????
@@ -62,9 +61,9 @@ export default function SprintBurndownChart(props) {
 	};
 
 	return (
-		<Stack spacing={2} style={{ marginTop: '1rem' }}>
+		<Stack spacing={2} style={{ marginTop: '1rem', flex: 1 }}>
 			<Typography variant="h5">Sprint Burndown</Typography>
-			<ResponsiveContainer width="100%" height={350} style={{ marginLeft: '2rem' }}>
+			<ResponsiveContainer width="100%" height={400} style={{ marginLeft: '2rem' }}>
 				<ComposedChart
 					width={500}
 					height={400}
@@ -78,7 +77,7 @@ export default function SprintBurndownChart(props) {
 				>
 					{/* <CartesianGrid strokeDasharray="3 3" /> */}
 					<XAxis dataKey="date" stroke="white" />
-					<YAxis stroke="white" label={{ value: 'Points Remaining', angle: -90, position: 'insideLeft', stroke: 'white' }} domain={[0, features.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)]} />
+					<YAxis stroke="white" label={{ value: 'Points', angle: -90, position: 'insideLeft', stroke: 'white' }} domain={[0, features.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)]} />
 					<Tooltip content={renderTooltipContent} />
 					<Line dataKey="ideal_remaining_points" connectNulls="true" stroke="#ff7376" />
 					<Line type="monotone" dataKey="remaining_points" stroke="#90ee90" fill="#90ee90" />

@@ -43,7 +43,7 @@ export default function Chart(props){
 	return (
 		<Stack spacing={2} style={{ textAlign: 'center', marginTop: '1rem' }}>
 			<Typography variant="h5">Sprint Composition</Typography>
-			<ResponsiveContainer width="100%" height={250}>
+			<ResponsiveContainer width="100%" height={400}>
 				<PieChart width={400} height={500}>
 					<Pie
 						data={data}

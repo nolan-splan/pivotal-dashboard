@@ -16,7 +16,6 @@ export default function StoryCompletionTime(props) {
 		const startedTransitions = transitionsForStory.filter(trans => trans.state === "started")
 		const acceptedTransitions = transitionsForStory.filter(trans => trans.state === "accepted")
 		const startedTransition = startedTransitions.filter(trans => moment(trans) >= moment(start))[startedTransitions.length - 1]
-		console.log(startedTransitions.length)
 		const acceptedTransition = acceptedTransitions[acceptedTransitions.length - 1]
 		const startDate = moment(startedTransition.occurred_at)
 		const endDate = acceptedTransition ? moment(acceptedTransition.occurred_at) : moment()

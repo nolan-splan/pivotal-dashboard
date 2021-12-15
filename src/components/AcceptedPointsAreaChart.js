@@ -70,9 +70,9 @@ export default function Example(props) {
 	};
 
 	return (
-		<Stack spacing={2} style={{ marginTop: '1rem' }}>
+		<Stack spacing={2} style={{ marginTop: '1rem', flex: 1 }}>
 			<Typography variant="h5">Sprint Burnup</Typography>
-			<ResponsiveContainer width="100%" height={250} style={{ marginLeft: '2rem' }}>
+			<ResponsiveContainer width="100%" height={400} style={{ marginLeft: '2rem' }}>
 				<ComposedChart
 					width={500}
 					height={400}

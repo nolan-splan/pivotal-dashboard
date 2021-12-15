@@ -10,6 +10,7 @@ import PointOwnership from './charts/radar/PointOwnership'
 import { fetchProjectMemberships } from '../pivotal_api'
 import SprintBurndownChart from './charts/line/SprintBurndownChart'
 import CurrentSprintHeader from './CurrentSprintHeader'
+import StorySizeMap from './charts/treemap/StorySizeMap'
 
 export default function CurrentSprint(props) {
 	const [currentSprint, setCurrentSprint] = React.useState({})
@@ -48,45 +49,24 @@ export default function CurrentSprint(props) {
 				<React.Fragment>
 					<CurrentSprintHeader sprint={currentSprint} />
 					<Divider />
-					<Grid container alignItems="center" spacing={3}>
-						<Grid item xs={3}>
-							<PointsBreakdownPieChart stories={currentSprint.stories} />
-						</Grid>
-						<Grid item xs={6}>
-							<AcceptedPointsAreaChart sprint={currentSprint} />
-						</Grid>
-						<Grid item xs={3}>
-							<SprintPercentComplete
-								acceptedPoints={
-									currentSprint.stories
-										.filter(story => story.story_type === "feature" && story.current_state === "accepted")
-										.map(story => story.estimate)
-										.reduce((partial_sum, a) => partial_sum + a, 0)
-								}
-								totalPoints={
-									currentSprint.stories
-										.filter(story => story.story_type === "feature")
-										.map(story => story.estimate)
-										.reduce((partial_sum, a) => partial_sum + a, 0)
-								}
-							/>
-						</Grid>
-					</Grid>
+					<Stack direction="row" spacing={2} justifyContent="space-around">
+						<PointsBreakdownPieChart stories={currentSprint.stories} />
+						<AcceptedPointsAreaChart sprint={currentSprint} />
+						<SprintBurndownChart sprint={currentSprint} />
+						<SprintPercentComplete sprint={currentSprint} />
+					</Stack>
+
 					<Divider style={{ marginTop: '1rem' }} />
-					<Grid container alignItems="center" spacing={3}>
-						<Grid item xs={3}>
-							<PointOwnership stories={currentSprint.stories} people={people} />
-						</Grid>
-            <Grid item xs={6}>
-              <SprintBurndownChart sprint={currentSprint} />
-            </Grid>
-            <Grid item xs={3}>
-              <Stack spacing={2} alignItems="center" justifyContent="space-around">
-                <Typography variant="h4">Team Strength</Typography>
-                <Typography variant="h1">{currentSprint.team_strength * 100}%</Typography>
-              </Stack>
-            </Grid>
-					</Grid>
+
+					<Stack direction="row" spacing={2} justifyContent="space-around">
+						<PointOwnership stories={currentSprint.stories} people={people} />
+						{/* <StorySizeMap sprint={currentSprint} /> */}
+						<Stack spacing={2} alignItems="center" justifyContent="center" flex={1}>
+							<Typography variant="h4">Team Strength</Typography>
+							<Typography variant="h1">{currentSprint.team_strength * 100}%</Typography>
+						</Stack>
+					</Stack>
+
 					{/** completion time vs story estimate graph? scatter plot */}
 					{/** point distribution by user? radar chart */}
 					{/** story time spent tree map (longer stories take up more space) simple tree map*/}

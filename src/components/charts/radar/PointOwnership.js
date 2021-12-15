@@ -49,7 +49,7 @@ export default function PointOwnership(props) {
 	};
 
 	return (
-		<Stack spacing={2} style={{ textAlign: 'center', marginTop: '1rem' }}>
+		<Stack spacing={2} alignItems="center" style={{ marginTop: '1rem', flex: 1 }}>
 			<React.Fragment>
 				<Typography variant="h5">Point Ownership</Typography>
 				<ResponsiveContainer width="100%" height={400}>

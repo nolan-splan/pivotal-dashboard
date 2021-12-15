@@ -5,7 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare } from '@fortawesome/free-solid-svg-icons';
 
 export default function SprintPercentComplete(props) {
-	const { acceptedPoints, totalPoints } = props
+	const { sprint } = props
+	const { stories } = sprint
+	const acceptedPoints = stories
+		.filter(story => story.story_type === "feature" && story.current_state === "accepted")
+		.map(story => story.estimate)
+		.reduce((partial_sum, a) => partial_sum + a, 0)
+
+	const totalPoints = stories
+		.filter(story => story.story_type === "feature")
+		.map(story => story.estimate)
+		.reduce((partial_sum, a) => partial_sum + a, 0)
+
 	const data = [
 		{
 			name: 'Accepted',
@@ -33,10 +44,10 @@ export default function SprintPercentComplete(props) {
 	}
 
 	return (
-		<Stack spacing={2} style={{ textAlign: 'center', marginTop: '1rem' }}>
+		<Stack spacing={2} direction="column" justifyContent="center" alignItems="center" style={{ marginTop: '1rem' }}>
 			<Typography variant="h5">Sprint Completion</Typography>
-			<ResponsiveContainer width="100%" height={250}>
-				<PieChart width={400} height={500}>
+			<ResponsiveContainer width="100%" height={400}>
+				<PieChart width={400} height={100}>
 					<Pie
 						data={data}
 						cx="50%"
