@@ -6,7 +6,7 @@ import { faCircle as faCircleEmpty } from '@fortawesome/free-regular-svg-icons'
 import moment from 'moment'
 
 export default function CurrentSprintHeader(props) {
-	const { sprint } = props
+	const { project, sprint } = props
 	const { start, finish, number } = sprint
 
 	const startDate = moment(start)
@@ -31,6 +31,8 @@ export default function CurrentSprintHeader(props) {
 
 	return (
 		<Stack direction="row" spacing={3}>
+			<Typography variant="h1">{project.name}</Typography>
+			<Divider orientation="vertical" variant="middle" flexItem />
 			<Typography variant="h1">Sprint #{number}</Typography>
 			<Divider orientation="vertical" variant="middle" flexItem />
 			<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} style={{ flex: 1 }}>

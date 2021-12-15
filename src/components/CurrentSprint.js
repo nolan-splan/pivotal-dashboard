@@ -1,12 +1,11 @@
 import { CircularProgress, Container, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
-import { fetchCurrentIteration } from '../pivotal_api'
+import { fetchCurrentIteration, fetchProjectMemberships, fetchProject } from '../pivotal_api'
 import PointsBreakdownPieChart from './PointsBreakdownPieChart'
 import AcceptedPointsAreaChart from './AcceptedPointsAreaChart'
 import SprintPercentComplete from './charts/pie/SprintPercentComplete'
 import PointOwnership from './charts/radar/PointOwnership'
-import { fetchProjectMemberships } from '../pivotal_api'
 import SprintBurndownChart from './charts/line/SprintBurndownChart'
 import CurrentSprintHeader from './CurrentSprintHeader'
 import StoryTypesForUserChart from './charts/bar/StoryTypesForUserChart'
@@ -14,8 +13,9 @@ import StoryTypesForUserChart from './charts/bar/StoryTypesForUserChart'
 export default function CurrentSprint(props) {
 	const [currentSprint, setCurrentSprint] = React.useState({})
 	const [people, setPeople] = React.useState([])
+  const [project, setProject] = React.useState({})
 
-	const projectId = 866453
+	const { projectId } = props
 
   const getPeopleFromMemberships = (memberships) => {
     const peeps = memberships.map(membership => membership.person)
@@ -23,12 +23,16 @@ export default function CurrentSprint(props) {
   }
 
   React.useEffect(() => {
+    fetchProject(projectId, setProject)
+  }, [projectId])
+
+  React.useEffect(() => {
     fetchProjectMemberships(projectId, getPeopleFromMemberships)
-  }, [])
+  }, [projectId])
 
 	React.useEffect(() => {
 		fetchCurrentIteration(projectId, setCurrentSprint)
-	}, [])
+	}, [projectId])
 
 	const renderLoadingSpinner = () => (
 		<Paper style={{ textAlign: 'center', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto', marginTop: '1rem' }}>
@@ -44,9 +48,9 @@ export default function CurrentSprint(props) {
 
 	return(
 		<Container maxWidth="lg">
-			{ Object.keys(currentSprint).length > 0 && people.length > 0 ? (
+			{ Object.keys(project).length > 0 && Object.keys(currentSprint).length > 0 && people.length > 0 ? (
 				<React.Fragment>
-					<CurrentSprintHeader sprint={currentSprint} />
+					<CurrentSprintHeader project={project} sprint={currentSprint} />
 					<Divider />
 					<Stack direction="row" spacing={2} justifyContent="space-around">
 						<PointsBreakdownPieChart stories={currentSprint.stories} />

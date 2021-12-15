@@ -8,14 +8,16 @@ import CurrentSprint from './components/CurrentSprint';
 
 
 function App() {
+  const [projectId, setProjectId] = React.useState("866453")
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Navbar theme={theme} />
+        <Navbar theme={theme} projectId={projectId} setProjectId={setProjectId} />
         <Routes>
-          <Route path="/" element={<CurrentSprint />} />
-          <Route path="previous_four_sprints" element={<PreviousFourSprints />} />
+          <Route path="/" element={<CurrentSprint projectId={projectId} />} />
+          <Route path="previous_four_sprints" element={<PreviousFourSprints projectId={projectId} />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

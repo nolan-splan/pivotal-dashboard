@@ -8,7 +8,8 @@ import { fetchIterations, fetchProjectMemberships } from '../pivotal_api';
 export default function PreviousFourSprints(props) {
   const [iterations, setIterations] = React.useState([])
   const [people, setPeople] = React.useState([])
-  const projectId = "866453"
+  // const projectId = "1073522"
+  const { projectId } = props
 
   const getPeopleFromMemberships = (memberships) => {
     const peeps = memberships.map(membership => membership.person)

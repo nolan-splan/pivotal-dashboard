@@ -5,11 +5,15 @@ import {
   AppBar,
   Button,
   Container,
+  TextField,
   Toolbar,
   Typography,
 } from '@mui/material'
 
 export default function Navbar(props) {
+  const { projectId, setProjectId } = props
+  const handleProjectIdChanged = (e) => setProjectId(e.target.value)
+
   return (
     <AppBar position="static" color="default">
       <Container maxWidth="xl">
@@ -23,7 +27,6 @@ export default function Navbar(props) {
           >
             Pivotal Dashboard
           </Typography>
-
           <Button sx={{ my: 2, color: 'white', display: 'block' }}>
             <NavLink to="/" style={({ isActive }) => {
               return {
@@ -46,6 +49,7 @@ export default function Navbar(props) {
               Previous 4 Sprints
             </NavLink>
           </Button>
+          <TextField id="project-id" label="Project ID" variant="outlined" value={projectId} onChange={handleProjectIdChanged} style={{ marginLeft: 'auto' }} />
         </Toolbar>
       </Container>
     </AppBar>
