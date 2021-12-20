@@ -39,6 +39,17 @@ export default function Navbar(props) {
             </NavLink>
           </Button>
           <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+            <NavLink to="/people" style={({ isActive }) => {
+              return {
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: isActive ? "bold" : ""
+              }
+            }}>
+              People
+            </NavLink>
+          </Button>
+          <Button sx={{ my: 2, color: 'white', display: 'block' }}>
             <NavLink to="/previous_four_sprints" style={({ isActive }) => {
               return {
                 color: 'white',
