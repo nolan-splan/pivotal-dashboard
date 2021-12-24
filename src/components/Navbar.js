@@ -18,15 +18,6 @@ export default function Navbar(props) {
     <AppBar position="static" color="default">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <FontAwesomeIcon size="2x" color="#90ee90" icon={faCompass} style={{ marginRight: '.5rem' }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-          >
-            Pivotal Dashboard
-          </Typography>
           <Button sx={{ my: 2, color: 'white', display: 'block' }}>
             <NavLink to="/" style={({ isActive }) => {
               return {

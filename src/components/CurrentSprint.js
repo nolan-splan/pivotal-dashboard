@@ -9,6 +9,7 @@ import PointOwnership from './charts/radar/PointOwnership'
 import SprintBurndownChart from './charts/line/SprintBurndownChart'
 import CurrentSprintHeader from './CurrentSprintHeader'
 import StoryTypesForUserChart from './charts/bar/StoryTypesForUserChart'
+import Timeline from './Timeline'
 
 export default function CurrentSprint(props) {
 	const [currentSprint, setCurrentSprint] = React.useState({})
@@ -70,6 +71,9 @@ export default function CurrentSprint(props) {
 							<Typography variant="h1">{currentSprint.team_strength * 100}%</Typography>
 						</Stack>
 					</Stack>
+					<div style={{ marginTop: '1rem' }}>
+						<Timeline project={project} sprint={currentSprint} />
+					</div>
 				</React.Fragment>
 			) : (
 				renderLoadingSpinner()
