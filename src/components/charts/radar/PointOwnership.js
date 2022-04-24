@@ -7,15 +7,16 @@ import { faSquare } from '@fortawesome/free-solid-svg-icons';
 export default function PointOwnership(props) {
 	const uniq = (val, index, self) => self.indexOf(val) === index
 
-	const { stories, people } = props
+	const { stories, memberships } = props
 
 	const features = stories.filter(story => story.story_type === "feature")
 
-	const ownerIds = features.map(story => story.owned_by_id).filter(uniq)
+	console.log('features', features)
 
+	const ownerIds = features.map(story => story.owned_by_id).filter(uniq).filter(id => id !== undefined)
 
 	let data = ownerIds.map(id => ({
-		owner: people.filter(person => person.id === id)[0].name,
+		owner: memberships.map(m => m.person).filter(p => p !== undefined).filter(person => person.id === id)[0].name,
 		points: features.filter(story => story.owned_by_id === id).map(story => story.estimate).reduce((ps, a) => ps + a, 0)
 	}))
 
@@ -28,7 +29,6 @@ export default function PointOwnership(props) {
 
 	const renderTooltipContent = (o) => {
 		const { payload, label } = o;
-		// const total = payload.reduce((result, entry) => result + entry.value, 0);
 		const total = features.map(story => story.estimate).reduce((partial_sum, a) => partial_sum + a, 0)
 
 		return (

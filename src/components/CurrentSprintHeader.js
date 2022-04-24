@@ -10,8 +10,8 @@ export default function CurrentSprintHeader(props) {
 
 	return (
 		<Stack direction="row" spacing={3} alignItems="center">
-			<Typography variant="h2">{project.name}</Typography>
-			<Divider orientation="vertical" variant="middle" flexItem />
+			{/* <Typography variant="h2">{project.name}</Typography>
+			<Divider orientation="vertical" variant="middle" flexItem /> */}
 			<Typography variant="h2">Sprint #{number}</Typography>
 			<Divider orientation="vertical" variant="middle" flexItem />
 			{/* <Divider orientation="vertical" variant="middle" flexItem /> */}

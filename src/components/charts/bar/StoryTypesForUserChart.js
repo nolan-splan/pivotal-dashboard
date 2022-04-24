@@ -5,7 +5,7 @@ import React from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function StoryTypesForUserChart(props) {
-  const { sprint, people } = props
+  const { sprint, memberships } = props
   const { stories } = sprint
   const features = stories.filter(story => story.story_type === "feature")
   const bugs = stories.filter(story => story.story_type === "bug")
@@ -13,10 +13,10 @@ export default function StoryTypesForUserChart(props) {
 
   const uniq = (val, index, self) => self.indexOf(val) === index
 
-  const ownerIds = stories.map(story => story.owned_by_id).filter(uniq)
+  const ownerIds = stories.map(story => story.owned_by_id).filter(uniq).filter(id => id !== undefined)
 
   const data = ownerIds.map(id => ({
-    name: people.filter(p => p.id === id)[0].name,
+    name: memberships.map(m => m.person).filter(p => p !== undefined).filter(p => p.id === id)[0].name,
     features: features.filter(f => f.owned_by_id === id).length,
     bugs: bugs.filter(b => b.owned_by_id === id).length,
     chores: chores.filter(c => c.owned_by_id === id).length,

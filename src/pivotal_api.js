@@ -7,9 +7,9 @@ export function fetchMe() {
   performRequest(`${baseUrl}/me`, options)
 }
 
-export function fetchMyPeople(callback) {
+export function fetchMyPeople(projectId, callback) {
   var options = { method: 'GET', headers: headers }
-  performRequest(`${baseUrl}/my/people?project_id=866453`, options)
+  performRequest(`${baseUrl}/my/people`, options)
     .then(res => res.json())
     .then(json => callback(json))
 }
@@ -19,9 +19,11 @@ export function fetchMyNotifications() {
   performRequest(`${baseUrl}/my/notifications?envelope=true`, options)
 }
 
-export function fetchMyProjects() {
+export function fetchMyProjects(callback) {
   var options = { method: 'GET', headers: headers }
   performRequest(`${baseUrl}/projects`, options)
+    .then(res => res.json())
+    .then(json => callback(json))
 }
 
 export function fetchProject(projectId, callback) {
@@ -31,11 +33,35 @@ export function fetchProject(projectId, callback) {
     .then(json => callback(json))
 }
 
-export function fetchIterations(projectId, callback) {
+export async function fetchIterations(projectId, callback) {
   var options = { method: 'GET', headers: headers }
-  performRequest(`${baseUrl}/projects/${projectId}/iterations?scope=done&offset=-4&limit=4`, options)
-    .then(res => res.json())
-    .then(json => callback(json))
+
+  // Max limit is 50 :(
+  const offsets = [50, 100, 150, 200]
+
+  const urls = offsets.map(n => {
+    return `${baseUrl}/projects/${projectId}/iterations?scope=done&offset=${n}&limit=50`
+  })
+
+  const requests = urls.map((url) => fetch(url, options))
+  const responses = await Promise.all(requests)
+
+  const errors = responses.filter((response) => !response.ok)
+
+  if (errors.length > 0) {
+    throw errors.map((response) => Error(response.statusText))
+  }
+
+  const json = responses.map((response) => response.json())
+  const data = await Promise.all(json)
+
+  callback(data.flat())
+
+  // var url = `${baseUrl}/projects/${projectId}/iterations?offset=50&limit=300`
+
+  // performRequest(url, options)
+  //   .then(res => res.json())
+  //   .then(json => callback(json))
 }
 
 export function fetchCurrentIteration(projectId, callback) {
